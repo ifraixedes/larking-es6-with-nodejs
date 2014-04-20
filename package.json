@@ -2,9 +2,9 @@
   "name": "larking-es6",
   "version": "0.0.0",
   "description": "My ECMAScript 6 wanderings with NodeJS",
-  "main": "index.js",
+  "homepage": "https://github.com/ifraixedes/larking-es6-with-nodejs",
   "directories": {
-    "example": "examples"
+    "src": "src"
   },
   "engines": {
     "node": "~0.11.0",
@@ -17,6 +17,10 @@
     "harmony",
     "examples"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ifraixedes/larking-es6-with-nodejs.git"
+  },
   "author": "Ivan Fraixedes Cugat (ifcdev@gmail.com)",
   "license": "MIT",
   "private": true
