@@ -1,0 +1,18 @@
+{
+  "name": "larking-es6-with-node",
+  "version": "0.0.0",
+  "description": "My ECMAScript 6 wanderings with NodeJS",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "keywords": [
+    "ECMAScript",
+    "ECMAScript6",
+    "ES6",
+    "harmony",
+    "examples"
+  ],
+  "author": "Ivan Fraixedes Cugat (ifcdev@gmail.com)",
+  "license": "MIT",
+}
