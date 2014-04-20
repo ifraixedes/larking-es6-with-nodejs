@@ -1,10 +1,14 @@
 {
-  "name": "larking-es6-with-node",
+  "name": "larking-es6",
   "version": "0.0.0",
   "description": "My ECMAScript 6 wanderings with NodeJS",
   "main": "index.js",
   "directories": {
     "example": "examples"
+  },
+  "engines": {
+    "node": "~0.11.0",
+    "engineStrict": true
   },
   "keywords": [
     "ECMAScript",
@@ -15,4 +19,5 @@
   ],
   "author": "Ivan Fraixedes Cugat (ifcdev@gmail.com)",
   "license": "MIT",
+  "private": true
 }
