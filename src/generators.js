@@ -127,7 +127,7 @@ try {
       var randomNumGen;
 
       if (counter >= 5) {
-        gen.throw(new Error('Counter reached 5'))
+        gen.throw(new Error('Counter reached 5'));
       }
 
       randomNumGen = gen.next();
