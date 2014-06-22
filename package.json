@@ -15,13 +15,14 @@
     "ECMAScript6",
     "ES6",
     "harmony",
-    "examples"
+    "examples",
+    "nodejs"
   ],
   "repository": {
     "type": "git",
     "url": "git@github.com:ifraixedes/larking-es6-with-nodejs.git"
   },
-  "author": "Ivan Fraixedes Cugat (ifcdev@gmail.com)",
+  "author": "Ivan Fraixedes <ivan@fraixed.es> (http://ivan.fraixed.es)",
   "license": "MIT",
   "private": true
 }
