@@ -1,5 +1,6 @@
 'use strict';
 
+// Generators definitions
 function *genSync1(max) {
  for(let n = 0; n < max; n++) {
    yield  n;
@@ -41,7 +42,22 @@ function *genSyncComposerIterator(start, end) {
   }
 }
 
+function *genThrowExceptionWhenRandomNumberIsLessThan(bottom) {
+  while (true) {
+    let rNum;
+    if ((rNum = Math.random()) > bottom) {
+      try {
+        yield rNum;
+      } catch (e) {
+        throw new Error('Received an external error. Error: ' + e.message);
+      }
+    } else {
+      throw new Error('Random number ' + rNum  + ' is less than ' + bottom);
+    }
+  }
+}
 
+// Generators execution
 var results = [];
 var gSync1 = new genSync1(3);
 
@@ -68,3 +84,60 @@ for (let val of gComposerIterator) {
 }
 
 console.log(results); // [0, 1, 2, 1, 2, 2]
+
+results = [];
+
+try {
+  for (let val of genThrowExceptionWhenRandomNumberIsLessThan(0.3)) {
+    results.push(val);
+  }
+} catch (e) {
+  console.log('genThrowExeption generator produced [%s] before it throws error: %s', results, e.message);
+}
+
+try {
+  let domain = require('domain').create();
+  let gen = genThrowExceptionWhenRandomNumberIsLessThan(0.3);
+
+  domain.on('error', console.log);
+  domain.add(gen);
+  domain.run(function () {
+    setImmediate(function runAgain() {
+      var randomNumGen = gen.next();
+
+      console.log('Asynchronous random number: %s', randomNumGen.value);
+      setImmediate(runAgain);
+    });
+  });
+} catch (e) {
+  // The execution never falls here, the error is thrown in a future event loop execution
+  console.log('IT MUST NOT BE CALLED!!! Error details: ' + e.message);
+}
+
+try {
+  let domain = require('domain').create();
+  //Never it throws an error from itself
+  let gen = genThrowExceptionWhenRandomNumberIsLessThan(0);
+
+  domain.on('error', console.log);
+  domain.add(gen);
+  domain.run(function () {
+    var counter = 0;
+    setImmediate(function runAgain() {
+      var randomNumGen;
+
+      if (counter >= 5) {
+        gen.throw(new Error('Counter reached 5'))
+      }
+
+      randomNumGen = gen.next();
+
+      counter++;
+      console.log('Asynchronous random number: %s', randomNumGen.value);
+      setImmediate(runAgain);
+    });
+  });
+} catch (e) {
+  // The execution never falls here, the error is thrown in a future event loop execution
+  console.log('IT MUST NOT BE CALLED!!! Error details: ' + e.message);
+}
