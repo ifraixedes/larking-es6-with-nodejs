@@ -57,6 +57,25 @@ function *genThrowExceptionWhenRandomNumberIsLessThan(bottom) {
   }
 }
 
+
+function *genCallYieldOnceAfterError() {
+  var error;
+  while (true) {
+    try {
+      yield 'More';
+    } catch (e) {
+      error = e;
+      break;
+    }
+  }
+
+  // It is executed but generator function doesn't yield more
+  // values due the generator object has been stopped when
+  // an error is thrown
+  console.log('After %s, geneator follows', error.message);
+  yield 'Last time';
+}
+
 // Generators execution
 var results = [];
 var gSync1 = new genSync1(3);
@@ -134,6 +153,42 @@ try {
 
       counter++;
       console.log('Asynchronous random number: %s', randomNumGen.value);
+      setImmediate(runAgain);
+    });
+  });
+} catch (e) {
+  // The execution never falls here, the error is thrown in a future event loop execution
+  console.log('IT MUST NOT BE CALLED!!! Error details: ' + e.message);
+}
+
+
+try {
+  let domain = require('domain').create();
+  let gen = genCallYieldOnceAfterError();
+
+  domain.on('error', console.log);
+  domain.add(gen);
+  domain.run(function () {
+    var counter = 0;
+    setImmediate(function runAgain() {
+      var genMsg;
+
+      if (counter >= 2) {
+        try {
+          gen.throw(new Error('Counter reached 2'));
+        } finally {
+          genMsg = gen.next();
+          // Error is undefined, because generator is done (genMsg.done === true)
+          // due it threw an Error, therefore generator is close
+          console.log('Generator says %s', genMsg.value);
+          return;
+        }
+      }
+
+      genMsg = gen.next();
+      console.log('Generator says %s', genMsg.value);
+
+      counter++;
       setImmediate(runAgain);
     });
   });
